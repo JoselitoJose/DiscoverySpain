@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta charset="UTF-8">
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <title>Discovery Spain</title>
+    <link rel="stylesheet" type="text/css" href="css/diseño.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+   
+</head>
+
+<body>
+
+    <audio id="clickSound" src="audios/SD_NAVIGATE_56.mp3"></audio>
+    <audio id="atras" src="audios/hacia-atras_1.mp3"></audio>
+    <audio id="dia" src="audios/dia.mp3"></audio>
+    <audio id="noche" src="audios/buenas-noches.mp3"></audio>
+    <audio id="star" src="audios/estrella.mp3"></audio>
+
+    <div class="logo-container">
+        <img class="logo" src="images/portada.jpeg" alt="Logo de Inicio" width="6000" >
+    </div>
+
+    <div class="container" id="container">
+            <a href="http://localhost:3000/index.html">
+        <div class="header">
+            <h1>
+                <br>
+            </h1>
+        </div></a>
+
+        <div class="content" id="content">
+            <div class="dropdown">
+                <button class="animated-button"><span><a href="http://localhost:3000/index.html" > Menú </a></span></button>
+                <div class="dropdown-content">
+                    <a href="http://localhost:3000/login.html" onclick="mostrarLogin()">Perfil</a>
+                 <a href="destinos/index-1.html" onclick="speak('Mis destinos')" >Mis destinos</a>
+                    <a href="#" id ="chatIcon"> Chat comunitario</a>
+                    <!-- <a href="#"onclick="speak('Restaurantes')">Restaurantes</a> -->
+                    <a href="#" onclick="mostrarPopup(), speak('Pregunta interactiva')" id="opciones"> Pregunta interactiva : </a>
+                    <!-- Ventana emergente -->
+                    <div class="overlay" id="overlay"></div>
+                    <div class="popup" id="popup">
+                        <p><b>Pregunta: ¿En qué año se fundó este lugar?</b></p>
+                        <button class="popup-button" onclick="seleccionarOpcion('Opción 1')">Opción 1</button>
+                        <button class="popup-button" onclick="seleccionarOpcion('Opción 2')">Opción 2</button>
+                        <button class="popup-button" onclick="seleccionarOpcion('Opción 3')">Opción 3</button>
+                    </div>
+                    <a href="scanner/index-sc.html" onclick="speak('QR scanner, comparte con tus amigos y familiares, porque viajar y compartir nunca fue tan fácil')">QR Scann</a>
+                    <a href="#" id="accesibilidad-link"  onclick="mostrarAccesibilidad(), speak('accesibilidad')">Accesibilidad</a>
+                    <a href="#" onclick="speak('Ayuda y soporte')">Ayuda y soporte</a>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="login-form" style="display: none;">
+            </div>
+    
+            <div id="map" ></div>
+            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+            <button id="start-recognition">Reconocimiento de Voz</button>
+
+
+
+
+            <!-- Sección de Destinos (inicialmente oculta) -->
+            <div class="destinos">
+                <div class="destino">
+                </div>
+
+                <div class="destino">
+                </div>
+            </div>
+                        
+            <div class="acceso" id="acceso2">
+                <!-- Botones de idioma y daltonismo -->
+                <div class="acceso-botones">
+                    <!-- Botón de idioma -->
+                    <div id="google_translate_element" class="google">
+                        <!--<div class="dropdown"> -->
+                        <img src="images/idioma.jpg" alt="Idioma">
+                    </div>
+            
+                    <!-- Botón de daltonismo class="dropbtn"-->
+                    <div class="dropdown"> 
+                        <img src="images/daltonismo.jpg" alt="Daltonismo">
+                        <button class="modo-switch"  id="daltonismoBtn">Daltonismo</button>
+                        <div class="dropdown-content" id="daltonismoOptions">
+                            <a href="#" id ="normal-btn" onclick="cambiarModoNormal()">Normal</a>
+                            <a href="#" id="deuteranopia-btn" onclick="cambiarModoDeuteranopia()" > Deuteranopia</a>
+                            <a href="#" id ="protanopia-btn" onclick="cambiarModoProtanopia()">Protanopia</a>
+                        </div>
+                    </div>
+                    
+                <!-- Botón de atrás -->
+                <button class="back-button" onclick="goBack()">Atrás</button>
+                </div>
+            
+            </div>
+            
+            
+
+            <div class="modo-nocturno-menu">
+                <button id="modoNocturno" class="modo-switch" onclick="cambiarModo()">Modo Nocturno</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Icono de chat -->
+    <div class="chat-icon">
+        <img class="logo" src="images/chat.png" alt="Logo de Inicio" width="6000" href="pagina-de-chat.html">
+    </div>
+
+    <div class="chat-box" id="chatIcon">
+        <div class="chat-header">
+            <h3>Chat Comunitario</h3>
+            <span class="close-btn" onclick="cerrarChat()">X</span>
+        </div>
+        <div class="chat-tabs">
+            <div class="chat-tab active" data-chat="global" onclick="cambiarChat('global')">Chat Global</div>
+            <div class="chat-tab" data-chat="local" onclick="cambiarChat('local')">Chat Local</div>
+            <div class="chat-tab" data-chat="amigos" onclick="cambiarChat('amigos')">Amigos</div>
+        </div>
+        <div class="chat-content" id="chatContent">
+            <!-- Contenido del chat -->
+        </div>
+    </div>
+
+
+
+
+
+    <!----------------------------------------------------------------------------------------------------------------------------------------------------->
+    <!----------------------------------------------------------------------------------------------------------------------------------------------------->    
+    <script>
+        var map = L.map('map').setView([39.3262, -4.8381], 7);
+        
+      
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+      </script>      
+    <!----------------------------------------------------------------------------------------------------------------------------------------------------->
+    <!----------------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+    <script>
+        // Mostrar el logotipo durante 3 segundos y luego ocultarlo
+        var logoContainer = document.querySelector(".logo-container");
+        setTimeout(function () {
+            logoContainer.style.display = "none";
+        }, 3000);
+
+        // Mostrar la página principal después de 3 segundos
+        setTimeout(function () {
+            var container = document.querySelector(".container");
+            container.style.display = "block";
+        }, 3000);
+
+        // Obtén el botón "Mis destinos"
+        var misDestinosButton = document.getElementById("mis-destinos-link");
+        var destinosSection = document.querySelector(".destinos");
+        var backButton = document.querySelector(".back-button");
+        var accesibilidadButtons = document.getElementById("accesibilidad-link")
+        var accesibilidadSection = document.querySelector(".acceso")
+
+        // Oculta el botón "Atrás" inicialmente
+        backButton.style.display = "none";
+        
+        
+        
+
+        accesibilidadButtons.addEventListener("click",function(event){
+            event.preventDefault();
+            // Oculta el mapa y el buscador
+           // var mapImage = document.querySelector(".image");
+           // var searchForm = document.querySelector(".search");
+          //  var mapImage = document.querySelector(".map");
+            var mapImage = document.getElementById("map")
+            var searchForm = document.querySelector(".search");
+            mapImage.style.display = "none";
+            searchForm.style.display = "none";
+            destinosSection.style.display = "none";
+
+            // Muestra la sección de destinos
+            accesibilidadSection.style.display = "flex";
+
+            // Muestra el botón "Atrás"
+            backButton.style.display = "block";
+
+        })
+
+
+       
+        function goBack() {
+            var mapImage = document.getElementById("map");
+            var destinosSection = document.querySelector(".destinos");
+            var accesibilidadSection = document.querySelector(".acceso");
+
+            // Muestra el mapa por defecto
+            mapImage.style.display = "block";
+
+            // Oculta las secciones adicionales
+            destinosSection.style.display = "none";
+            accesibilidadSection.style.display = "none";
+
+
+            var backButton = document.querySelector(".back-button");
+            backButton.style.display = "none";
+        }
+
+        function cambiarIdioma() {
+            alert("Cambiando idioma...");
+        }
+
+       
+
+        function mostrarAccesibilidad() {
+            var accesoSection = document.querySelector(".acceso");
+            accesoSection.classList.toggle("show");
+
+            if (clickSound) {
+                clickSound.play();
+            }
+            var mapImage = document.getElementById("map");
+            var searchForm = document.querySelector(".search");
+            mapImage.style.display = "none";
+            searchForm.style.display = "none";
+            accesibilidadSection.style.display = "block";
+
+            // Muestra la sección de destinos
+            destinosSection.style.display = "none";
+
+            // Muestra el botón "Atrás"
+            backButton.style.display = "block";
+            
+        }
+
+
+        //---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+        var modoNocturno = false; // Inicialmente, el modo nocturno está desactivado
+
+        function cambiarModo() {
+            var body = document.body;
+            var content = document.getElementById("container");
+
+            var map = document.getElementById("map");
+            var modoNocturnoButton = document.getElementById("modoNocturno");
+            // var night = document.getElementById("night");
+
+            if (modoNocturno) {
+                // Cambiar al modo día
+                var dia = document.getElementById("dia");
+
+                if (dia) {
+                    dia.play();
+                }
+                body.classList.remove("modo-nocturno");
+                content.style.backgroundColor = "rgb(0, 0, 0)";
+                content.style.color = "white";
+
+                map.style.backgroundColor = "rgb(0, 0, 0)";
+                map.style.color = "black";
+
+                modoNocturnoButton.textContent = "Modo Nocturno";
+            } else {
+                // Cambiar al modo nocturno
+                var noche = document.getElementById("noche");
+
+                if (noche) {
+                    noche.play();
+                }
+                body.classList.add("modo-nocturno");
+                content.style.backgroundColor = "rgb(255, 255, 255)";
+                content.style.color = "white";
+                
+
+                map.style.backgroundColor = "rgb(25, 25, 25)";
+                map.style.color = "white";
+                modoNocturnoButton.textContent = "Modo Día";
+            }
+
+            modoNocturno = !modoNocturno; // Cambia el estado del modo
+        }
+
+
+        //---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+        function mostrarPopup() {
+            var overlay = document.getElementById("overlay");
+            var popup = document.getElementById("popup");
+            overlay.style.display = "block";
+            popup.style.display = "block";
+        }
+
+        // Función para seleccionar una opción
+        function seleccionarOpcion(opcion) {
+            alert("Has seleccionado: " + opcion);
+            cerrarPopup();
+        }
+
+        // Función para cerrar la ventana emergente
+        function cerrarPopup() {
+            var overlay = document.getElementById("overlay");
+            var popup = document.getElementById("popup");
+            //  var op = document.getElementById("opciones");
+            //  op.style.display = "none";
+            overlay.style.display = "none";
+            popup.style.display = "none";
+        }
+
+        //-------------------------------------------------------------------------------------------------------------4
+        function cambiarModoDeuteranopia() {
+            const body = document.body;
+            const container = document.querySelector(".container");
+            const header = document.querySelector(".header");
+            const animatedButton = document.querySelector(".animated-button");
+            const dropdown = document.querySelector(".dropdown");
+            const dropdown_content = document.querySelector(".dropdown-content");
+            const accesodropdown_content = document.querySelector(".acceso .dropdown-content");
+            //const backbutton = document.querySelector(".back-button");
+            const buttons = document.querySelectorAll(".button, .popup-button, .back-button");
+            
+
+            // Toggle (alternar) la clase 'deuteranopia' en el cuerpo del documento
+            body.classList.toggle('deuteranopia');
+            container.classList.toggle('deuteranopia');
+            header.classList.toggle('deuteranopia');
+            animatedButton.classList.toggle('deuteranopia');
+            //backButton.classList.toggle('deuteranopia');
+            dropdown.classList.toggle('deuteranopia');
+            dropdown_content.classList.toggle('deuteranopia');
+            accesodropdown_content.classList.toggle('deuteranopia');
+
+            buttons.forEach(button => {
+                button.classList.toggle('deuteranopia');
+            });
+            if (clickSound) {
+                clickSound.play();
+            }
+        
+        }
+
+        function cambiarModoProtanopia() {
+            const body = document.body;
+            const container = document.querySelector(".container");
+            const header = document.querySelector(".header");
+            const animatedButton = document.querySelector(".animated-button");
+            const dropdown = document.querySelector(".dropdown");
+            const dropdown_content = document.querySelector(".dropdown-content");
+            const accesodropdown_content = document.querySelector(".acceso .dropdown-content");
+            //const backbutton = document.querySelector(".back-button");
+            const buttons = document.querySelectorAll(".button, .popup-button, .back-button");
+            
+
+            // Toggle (alternar) la clase 'deuteranopia' en el cuerpo del documento
+            body.classList.toggle('protanopia');
+            container.classList.toggle('protanopia');
+            header.classList.toggle('protanopia');
+            animatedButton.classList.toggle('protanopia');
+            //backButton.classList.toggle('protanopia');
+            dropdown.classList.toggle('protanopia');
+            dropdown_content.classList.toggle('protanopia');
+            accesodropdown_content.classList.toggle('protanopia');
+
+            buttons.forEach(button => {
+                button.classList.toggle('protanopia');
+            });
+            if (clickSound) {
+                clickSound.play();
+            }
+        }
+
+
+        function cambiarModoNormal() {
+            const body = document.body;
+            const header = document.querySelector(".header");
+            const animatedButton = document.querySelector(".animated-button");
+            const buttons = document.querySelectorAll(".button, .popup-button");
+
+            // Toggle (alternar) la clase 'normal' en el cuerpo del documento
+            body.classList.toggle('normal');
+            header.classList.toggle('normal');
+            animatedButton.classList.toggle('normal');
+
+            buttons.forEach(button => {
+                button.classList.toggle('normal');
+            });
+            if (clickSound) {
+                clickSound.play();
+            }
+        }
+
+        
+        function playClickSound() {
+            var clickSound = document.getElementById("clickSound");
+            if (clickSound) {
+                clickSound.play();
+            }
+        }
+
+        function estrellaSound() {
+            var clickSound = document.getElementById("star");
+            if (clickSound) {
+                clickSound.play();
+            }
+        }
+
+
+
+    //--------------------------------------------------------------------------------------//
+
+    document.getElementById("chatIcon").addEventListener("click", function () {
+            document.getElementById("chatBox").style.width = "250px";
+        });
+
+        // Función para cerrar el chat
+        function cerrarChat() {
+            document.getElementById("chatBox").style.width = "0";
+        }
+
+        // Función para cambiar entre pestañas de chat
+        function cambiarChat(tab) {
+            const tabs = document.querySelectorAll(".chat-tab");
+            tabs.forEach(t => t.classList.remove("active"));
+
+            const selectedTab = document.querySelector(`.chat-tab[data-chat="${tab}"]`);
+            selectedTab.classList.add("active");
+
+            // Lógica para cargar contenido del chat (solo para demostración)
+            const chatContent = document.getElementById("chatContent");
+            chatContent.innerHTML = `<p>Mostrando chat ${tab}</p>`;
+        }
+
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'es', includedLanguages: 'ca,eu,gl,en,fr,it,pt,de', layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL}, 'google_translate_element');
+                }
+    </script>
+        
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+   
+<!-- --------------------------------------------------------------------------------------------------------------------------- -->
+
+    <script>
+        function speak(text) {
+            var msg = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+    
+    <script>
+        var recognition = new webkitSpeechRecognition();
+        recognition.lang = 'es-ES'; // Configura el idioma deseado
+
+        recognition.onresult = function(event) {
+            var transcript = event.results[0][0].transcript.toLowerCase();
+            //alert("Reconocido: " + transcript);
+            // Aquí puedes agregar lógica adicional basada en 'transcript'
+            // Por ejemplo, si transcript es 'perfil', haz algo específico
+            if (transcript === 'perfil.') {
+                window.location.href = "http://localhost:3000/login.html";
+                mostrarLogin();
+            }
+            if (transcript === 'destinos.') {
+                window.location.href = "http://localhost:3000/destinos/index-1.html";
+            }
+            if (transcript === 'acceso.') {
+                mostrarAccesibilidad();
+            }
+        };
+
+        document.getElementById('start-recognition').addEventListener('click', function() {
+            recognition.start(); // Inicia el reconocimiento de voz
+        });
+
+        
+        function startRecognition() {
+            recognition.start();
+        }
+    </script>
+        
+
+</body>
+
+</html>

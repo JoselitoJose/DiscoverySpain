@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Generador de Códigos QR</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url("../images/portada.jpeg");
+            background-size: 50%;
+            
+            background-position: left;
+        }
+
+        header {
+            background-color: black;
+            color: wheat;
+            padding: 10px;
+            text-align: center;
+            font-size: 1.5em;
+            text-decoration: underline;
+        }
+        .fondo {
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 1); /* Agrega una sombra negra */
+            padding: 20px;
+            width: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        main {
+            text-align: center;
+            color: wheat;
+            font-size: large;
+            font-weight: bold;
+        }
+
+        select, button {
+            font-size: 1em;
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        select {
+            width: 200px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        #qrcode {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #backButton {
+            margin-top: 20px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="fondo" id="fondo">
+        <header>
+            <h1>Generador de Códigos QR</h1>
+        </header>
+        
+        <main>
+            <label for="urlSelect">Selecciona la página:</label>
+            <select id="urlSelect">
+                <option value="https://example.com">Example.com</option>
+                <option value="https://google.com">Google</option>
+                <!-- Agrega más opciones según tus necesidades -->
+            </select>
+            <br>
+            <button onclick="generarQR()" style=" font-weight: bold;">Generar QR</button>
+
+            <div id="qrcode"></div>
+            <button id="backButton" onclick="volverPaginaPrincipal()" style="color: wheat; font-weight: bold; background-color: black;">Volver a la Página Principal</button>
+
+            <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+            <script>
+                function generarQR() {
+                    // Borra el QR anterior
+                    document.getElementById("qrcode").innerHTML = "";
+
+                    var select = document.getElementById("urlSelect");
+                    var selectedUrl = select.options[select.selectedIndex].value;
+
+                    // Genera el código QR
+                    var qrcode = new QRCode(document.getElementById("qrcode"), {
+                        text: selectedUrl,
+                        
+                        width: 350,
+                        height: 350,
+                        correctLevel: QRCode.CorrectLevel.H // Nivel de corrección de errores alto
+
+                    });
+                }
+                function volverPaginaPrincipal() {
+                    // Redirige a la página principal
+                    window.location.href = "../index.html";
+                }
+            </script>
+        </main>
+    </div>
+</body>
+</html>

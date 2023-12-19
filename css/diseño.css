@@ -1,0 +1,983 @@
+body {
+    
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    /* Para establecer un diseño de columna principal */
+    height: 100vh;
+    align-items: center;
+    /* Para centrar elementos horizontalmente */
+    justify-content: flex-start;
+    /* Alinea los elementos en la parte superior */
+}
+
+a {
+    color: black; /* Cambiar color del texto */
+    text-decoration: none; /* Eliminar subrayado */
+    font-weight: bold; /* Hacer el texto en negrita */
+ }
+
+/* Estilo para el logotipo inicial */
+.logo-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 144, 70);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    width: 100%;
+    padding: 20px;
+    display: none;
+    /* background-image: url("fondoPrincipal.jpg"); */
+    background-size: contain;
+    background-color: rgb(157, 231, 161);
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    padding: 0;
+    
+    
+}
+
+.map-search {
+    display: block;
+    position: absolute;
+    margin: -1%;
+    margin-left: 5%;
+    
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    align-items: flex-start;
+    /* Alinea los elementos en la parte superior */
+    justify-content: space-between;
+    /* Alinea el espacio entre el mapa y el buscador */
+    position: relative;
+}
+
+#map {
+    display: block;
+    height: 400px;
+    width: 70%;
+    margin-top: auto;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-bottom: auto;
+    align-items: center;
+    justify-content: space-between;
+    
+    align-items: flex-start;
+
+ }
+
+/* Estilos para el contenedor del mapa */
+/*  #map {
+    height: 400px;
+    width: 100%;
+    margin: 20px 0;
+}
+*/
+/* Estilos para los elementos del mapa (ejemplo: los popups de marcadores) */
+.leaflet-popup-content {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../images/portada.jpeg');
+    background-position: center;
+    background-size: 28.2%;
+    background-position-x: 50% ;
+    background-position-y: 46%;
+    /*background-color: rgb(18, 214, 84);*/
+    margin: -1.7%;
+    color: rgb(0, 0, 0);
+    padding: 20px;
+    width: 100%;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.image {
+    /* max-width: calc(100% - 250px);  Limita el ancho del mapa */
+    height: auto;
+    margin-left: 11%;
+    margin-top: -5%;
+}
+
+.search {
+    max-width: 250px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.star-rating {
+    font-size: 24px;
+    width: 700px;
+    /* Ajusta el ancho del rectángulo */
+    margin-left: 20px;
+    /* Añade un margen entre la imagen y las estrellas */
+    height: 120px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0;
+}
+
+.star-rating label:before {
+    content: '\2605';
+    /* Estrella rellena */
+    display: block;
+}
+
+.star-rating input:checked~label {
+    color: #fcff39;
+    /* Color de estrella seleccionada */
+}
+
+/* Estilos para el botón animado */
+.animated-button {
+    display: block;
+    border-radius: 4px;
+    background-color: #46a706;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 24px;
+    padding: 15px;
+    width: 200px;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.animated-button:hover {
+    background-color: #3b8b06;
+}
+
+/* Estilos para el icono de chat */
+.chat-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+}
+
+/* Estilos para el menú desplegable */
+.dropdown {
+    display: block;
+    position: relative;
+    margin: 0.9%;
+
+}
+
+
+.dropdown-content {
+    display: block;
+    margin: auto;
+    position: absolute;
+    position: relative;
+    background-color: #f5d6c1;
+    width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 4px;
+}
+
+.dropdown-content a {
+    padding: 15px;
+    
+    text-decoration: none;
+    display: block;
+    color: #333;
+    text-align: center;
+    font-size: 10px;
+    background-color: rgb(103, 238, 69)
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.acceso {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    
+}
+
+.acceso.show {
+    display: flex;
+}
+
+.acceso-botones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+    margin-left: 500px;
+}
+
+.acceso img {
+    max-width: 100px;
+    height: auto;
+    margin-right: 10px;
+    margin-left: 150px;
+    
+}
+
+.acceso.acceso-botones  {
+    display: table;
+}
+
+.acceso .dropdown {
+    display: inline-block;
+    position: relative;
+}
+
+.acceso .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f5d6c1;
+    width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 4px;
+    top: 100%;
+    left: 50%;
+}
+
+.acceso .dropdown-content a {
+    padding: 15px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+    text-align: center;
+    font-size: 20px;
+}
+
+.acceso .dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.acceso .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.back-button {
+    background-color: #46a706;
+    border: none;
+    position: absolute; /* Establece el posicionamiento absoluto */
+    bottom: 18%; /* Coloca el botón en la parte inferior del contenedor */
+    left: 25%; /* Coloca el botón a la izquierda del contenedor */
+    color: #FFFFFF;
+    text-align: justify;
+    font-size: 24px;
+    padding: 15px;
+    cursor: pointer;
+    transition:  background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #7be436;
+}
+
+
+.dropdown {
+    display: inline-block;
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f5d6c1;
+    width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 4px;
+    top: 100%;
+    left: 0;
+}
+
+.dropdown-content a {
+    padding: 15px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+    text-align: center;
+    font-size: 20px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.destinos {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+}
+
+.destino {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 530px;
+    max-width: 530px;
+    margin-left: 265%;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+    /* Agregar sombra */
+}
+
+.destino img {
+    max-width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.destino-info {
+    text-align: left;
+}
+
+.destino h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.destino p {
+    font-size: 16px;
+    margin: 0;
+}
+
+.modo-nocturno-menu {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 3;
+}
+
+
+
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente */
+    justify-content: center; /* Centra verticalmente */
+    height: 100vh;
+}
+
+.login-form input {
+    /* Estilos para los campos de entrada */
+}
+
+.login-form button {
+    /* Estilos para los botones */
+}
+
+
+
+
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,700);
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+
+body, html {
+  height: 100%;
+}
+body {
+  font-family: 'Open Sans';
+  font-weight: 100;
+  display: flex;
+  overflow: hidden;
+}
+input {
+  ::-webkit-input-placeholder {
+     color: rgba(255,255,255,0.7);
+  }
+  ::-moz-placeholder {
+     color: rgba(255,255,255,0.7);  
+  }
+  :-ms-input-placeholder {  
+     color: rgba(255,255,255,0.7);  
+  }
+  &:focus {
+    outline: 0 transparent solid;
+    ::-webkit-input-placeholder {
+     color: rgba(0,0,0,0.7);
+    }
+    ::-moz-placeholder {
+       color: rgba(0,0,0,0.7);  
+    }
+    :-ms-input-placeholder {  
+       color: rgba(0,0,0,0.7);  
+    }
+  }
+}
+
+.login-form {
+  /*background: #222;*/
+  /*box-shadow: 0 0 1rem rgba(0,0,0,0.3);*/
+  min-height: 10rem;
+  margin: auto;
+  max-width: 50%;
+  padding: .5rem;
+}
+.login-text {
+  /*background: hsl(40,30,60);*/
+  /*border-bottom: .5rem solid white;*/
+  color: white;
+  font-size: 1.5rem;
+  margin: 0 auto;
+  max-width: 50%;
+  padding: .5rem;
+  text-align: center;
+  /*text-shadow: 1px -1px 0 rgba(0,0,0,0.3);*/
+  .fa-stack-1x {
+    color: black;
+  }
+}
+
+.login-username, .login-password {
+  background: transparent;
+  border: 0 solid;
+  border-bottom: 1px solid rgba(white, .5);
+  color: white;
+  display: block;
+  margin: 1rem;
+  padding: .5rem;
+  /*transition: 250ms background ease-in;*/
+  width: calc(100% - 3rem);
+  &:focus {
+    background: white;
+    color: black;
+    transition: 250ms background ease-in;
+  }
+}
+
+.login-forgot-pass {
+  /*border-bottom: 1px solid white;*/
+  bottom: 0;
+  color: white;
+  cursor: pointer;
+  display: block;
+  font-size: 75%;
+  left: 0;
+  opacity: 0.6;
+  padding: .5rem;
+  position: absolute;
+  text-align: center;
+  /*text-decoration: none;*/
+  width: 100%;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.login-submit {
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  display: block;
+  margin: 1rem auto;
+  min-width: 1px;
+  padding: .25rem;
+  transition: 250ms background ease-in;
+  &:hover, &:focus {
+    background: white;
+    color: black;
+    transition: 250ms background ease-in;
+  }
+}
+
+
+
+
+[class*=underlay] {
+  left: 0;
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  top: 0;
+}
+.underlay-photo {
+  animation: hue-rotate 6s infinite;
+  background: url('https://31.media.tumblr.com/41c01e3f366d61793e5a3df70e46b462/tumblr_n4vc8sDHsd1st5lhmo1_1280.jpg');
+  background-size: cover;
+  -webkit-filter: grayscale(30%);
+  z-index: -1;
+}
+.underlay-black {
+  background: rgba(0,0,0,0.7);
+  z-index: -1;
+}
+
+@keyframes hue-rotate {
+  from {
+    -webkit-filter: grayscale(30%) hue-rotate(0deg);
+  }
+  to {
+    -webkit-filter: grayscale(30%) hue-rotate(360deg);
+  }
+}
+
+
+
+
+
+/*   <style id="modoNocturnoCSS">
+/* Agrega estilos generales */
+body {
+    background-color: #fff;
+    /* Fondo predeterminado para el modo día */
+    color: black;
+    /* Texto predeterminado para el modo día */
+    /* Agrega otros estilos generales aquí */
+}
+
+.container.night {
+    background-color: black;
+    /* Fondo para el modo nocturno */
+    color: white;
+    /* Texto para el modo nocturno */
+
+    /* Agrega otros estilos específicos para el modo nocturno aquí */
+}
+
+/* Estilos específicos para el modo nocturno */
+body.modo-nocturno {
+    background-color: #333;
+    
+    /* Fondo para el modo nocturno */
+    color: white;
+    /* Texto para el modo nocturno */
+
+    /* Agrega otros estilos específicos para el modo nocturno aquí */
+}
+
+/* Estilos para el botón interruptor */
+.modo-switch {
+    background-color: #fff;
+    color: #333;
+    border: 2px solid #333;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Estilos para el botón interruptor cuando está en el modo nocturno */
+.modo-switch.modo-nocturno {
+    background-color: #333;
+    color: #fff;
+}
+
+
+
+/* Estilo para la ventana emergente */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+/* Estilo para el fondo oscurecido detrás de la ventana emergente */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Estilo para los botones de opciones */
+.popup-button {
+    display: block;
+    margin: 10px 0;
+}
+
+
+
+
+
+<!-------------------------------------------------------------------------------------------------------------------------------------->
+
+
+body.deuteranopia {
+    background-color: rgb(231, 191, 9); 
+    color: #000000; /* Texto negro */
+}
+
+/* Estilos para el encabezado */
+.header.deuteranopia {
+    background-color: rgb(189, 98, 12); /* Encabezado en negro */
+    color: #000000; /* Texto en blanco */
+}
+
+/* Estilos para los botones */
+.button.deuteranopia {
+    background-color: rgb(29, 25, 238); /* Fondo rojo para resaltar el botón */
+    color: #ffffff; /* Texto en blanco para mayor contraste */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button.deuteranopia:hover {
+    background-color: #0f1ef1; /* Color de fondo ligeramente más claro al pasar el mouse */
+}
+
+/* Estilos para los enlaces */
+a.deuteranopia {
+    color: #0000ff; /* Enlaces azules para ser fácilmente distinguibles del texto */
+}
+
+a.deuteranopia:hover {
+    text-decoration: underline; /* Subrayar enlaces al pasar el mouse */
+}
+
+/* Estilos para el contenido */
+.content.deuteranopia {
+    background-color: #f2f2f2; /* Fondo gris claro para resaltar el contenido */
+}
+
+/* Estilos para los botones de opciones */
+.popup-button.deuteranopia {
+    background-color: #0044ff; /* Fondo azul para resaltar el botón */
+    color: #ffffff; /* Texto en blanco para mayor contraste */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup-button.deuteranopia:hover {
+    background-color: #5582ff; /* Color de fondo ligeramente más claro al pasar el mouse */
+}
+
+.animated-button.deuteranopia {
+    background-color: rgb(235, 74, 10);
+    color: #000000;
+}
+
+.back-button.deuteranopia {
+    background-color: #1e2cf4;
+    border: none;
+    position: absolute; /* Establece el posicionamiento absoluto */
+    bottom: 18%; /* Coloca el botón en la parte inferior del contenedor */
+    left: 25%; /* Coloca el botón a la izquierda del contenedor */
+    color: #FFFFFF;
+    text-align: justify;
+    font-size: 24px;
+    padding: 15px;
+    cursor: pointer;
+    transition:  background-color 0.3s;
+}
+
+<!--------------------------------------------------------------------------------------------------------------------------------------
+
+body.protanopia {
+    background-color: rgb(16, 168, 29); 
+    color: #000000; /* Texto negro */
+}
+
+/* Estilos para el encabezado */
+.header.protanopia {
+    background-color: rgb(141, 8, 230); /* Encabezado en negro */
+    color: #ffffff; /* Texto en blanco */
+}
+
+/* Estilos para los botones */
+.button.protanopia {
+    background-color: #ee281a; /* Fondo rojo para resaltar el botón */
+    color: #ffffff; /* Texto en blanco para mayor contraste */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button.protanopia:hover {
+    background-color: #558bff; /* Color de fondo ligeramente más claro al pasar el mouse */
+}
+
+/* Estilos para los enlaces */
+a.protanopia {
+    color: #0000ff; /* Enlaces azules para ser fácilmente distinguibles del texto */
+}
+
+a.protanopia:hover {
+    text-decoration: underline; /* Subrayar enlaces al pasar el mouse */
+}
+
+/* Estilos para el contenido */
+.content.protanopia {
+    background-color: #f2f2f2; /* Fondo gris claro para resaltar el contenido */
+}
+
+/* Estilos para los botones de opciones */
+.popup-button.protanopia {
+    background-color: #48ff00; /* Fondo azul para resaltar el botón */
+    color: #ffffff; /* Texto en blanco para mayor contraste */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup-button.protanopia:hover {
+    background-color: rgb(241, 26, 19); /* Color de fondo ligeramente más claro al pasar el mouse */
+}
+
+
+.animated-button.protanopia {
+    background-color: rgb(241, 19, 123);
+    color: #ffffff;
+    text-shadow: #ccc;
+}
+
+.back-button.protanopia {
+    background-color: #ee0c0c;
+    border: none;
+    position: absolute; /* Establece el posicionamiento absoluto */
+    bottom: 18%; /* Coloca el botón en la parte inferior del contenedor */
+    left: 25%; /* Coloca el botón a la izquierda del contenedor */
+    color: #FFFFFF;
+    text-align: justify;
+    font-size: 24px;
+    padding: 15px;
+    cursor: pointer;
+    transition:  background-color 0.3s;
+}
+
+<!--------------------------------------------------------------------------------------------------------------------------------------
+
+body.normal {
+    background-color: rgb(18, 214, 84);
+    color: rgb(0, 0, 0);
+}
+
+/* Estilos para el encabezado */
+.header.normal {
+    background-color: rgb(18, 214, 84);
+    color: rgb(0, 0, 0);
+}
+
+/* Estilos para los botones */
+.button.normal {
+    background-color: #3219a3; /* Fondo rojo para resaltar el botón */
+    color: #ffffff; /* Texto en blanco para mayor contraste */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button.normal:hover {
+    background-color: #558bff; /* Color de fondo ligeramente más claro al pasar el mouse */
+}
+
+/* Estilos para los enlaces */
+a.normal {
+    color: #0000ff; /* Enlaces azules para ser fácilmente distinguibles del texto */
+}
+
+a.normal:hover {
+    text-decoration: underline; /* Subrayar enlaces al pasar el mouse */
+}
+
+/* Estilos para el contenido */
+.content.normal {
+    background-color: #f2f2f2; /* Fondo gris claro para resaltar el contenido */
+}
+
+/* Estilos para los botones de opciones */
+.popup-button.normal {
+    background-color: #0044ff; /* Fondo azul para resaltar el botón */
+    color: #ffffff; /* Texto en blanco para mayor contraste */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup-button.normal:hover {
+    background-color: #5582ff; /* Color de fondo ligeramente más claro al pasar el mouse */
+}
+
+.back-button.normal {
+    background-color: #f4511e;
+    border: none;
+    position: absolute; /* Establece el posicionamiento absoluto */
+    bottom: 18%; /* Coloca el botón en la parte inferior del contenedor */
+    left: 25%; /* Coloca el botón a la izquierda del contenedor */
+    color: #FFFFFF;
+    text-align: justify;
+    font-size: 24px;
+    padding: 15px;
+    cursor: pointer;
+    transition:  background-color 0.3s;
+}
+
+<!--------------------------------------------------------------------------------------------------------------
+
+/* Estilos para el chat */
+.chat-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.chat-box {
+    position: fixed;
+    top: 0;
+    right: -250px; /* Inicialmente oculto */
+    width: 250px;
+    height: 100%;
+    background-color: #f0f0f0; /* Color de fondo del chat */
+    overflow-y: auto;
+    transition: 0.5s;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.chat-header {
+    background-color: #333; /* Color de fondo del encabezado */
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-btn {
+    cursor: pointer;
+}
+
+.chat-tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+}
+
+.chat-tab {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.chat-tab.active {
+    background-color: #ddd; /* Color de fondo de la pestaña activa */
+}
+
+.chat-content {
+    padding: 10px;
+}
+
+
+#google_translate_element span {
+    display: none;
+}
+
+#google_translate_element::before {
+    content: "Traductor";
+    font-size: 20px;
+    font: message-box;
+    text-align: center;
+    color: blue;
+}
+
+#start-recognition {
+    display: block;
+    border-radius: 4px;
+    background-color: #46a706;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 24px;
+    position: fixed; /* Posición fija en la pantalla */
+    bottom: 20px;    /* Espaciado desde la parte inferior */
+    right: 80px;     /* Espaciado desde la derecha */
+    z-index: 1000;   /* Asegura que el botón esté por encima de otros elementos */
+    /* Puedes agregar más estilos aquí para personalizar su apariencia */
+}
+
