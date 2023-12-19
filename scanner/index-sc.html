@@ -29,11 +29,11 @@
             text-decoration: underline;
         }
         .fondo {
-/*             box-shadow: 10px 10px 10px rgba(0, 0, 0, 1); /* Agrega una sombra negra */
-            box-shadow: 10px 10px 10px rgba(255, 255, 255, 1); /* Agrega una sombra negra */
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 1); /* Agrega una sombra negra */
+           
             padding: 20px;
             width: auto;
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(0, 0, 0, 0.7);
         }
 
         main {
@@ -114,7 +114,9 @@
                         width: 350,
                         height: 350,
                         correctLevel: QRCode.CorrectLevel.H // Nivel de corrección de errores alto
-
+                        colorDark: "#3FDE63",  // Color de los módulos oscuros (verde)
+                        colorLight: "#FFFFFF"  // Color de los módulos claros (blancos)
+    
                     });
                 }
                 function volverPaginaPrincipal() {
